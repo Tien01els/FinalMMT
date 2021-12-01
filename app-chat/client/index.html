@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css">
+    <title>Đồ án môn học: An Toàn Thông Tin</title>
+</head>
+
+<body>
+    <div id="main">
+        <div class="sidebar">
+            <div class="chat-sidebar-top">
+                <div class="chat-sidebar-content">
+                    <h3>Chats</h3>
+                    <button type="button" class="btn add-contact">
+                            <i class="ri-add-fill"></i>
+                        </button>
+                </div>
+                <div class="chat-search-contact">
+                    <input class="chat-input-search" placeholder="Search here..."></input>
+                    <button class="btn chat-btn-search">
+                            <i class="ri-search-line"></i>
+                        </button>
+                </div>
+            </div>
+            <div class="chat-list">
+
+            </div>
+        </div>
+        <div class="chat-container">
+            <div class="chat-topbar">
+                <div class="level-left">
+                    <div class="user-image">
+                        <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c7156d1c-515c-4a5d-ab77-a856fedda897/ddplk9t-1b198c3d-d63d-4125-aa12-0c1e5aff9870.png/v1/fill/w_894,h_894,strp/metalcluster_zero_one_by_markolios_ddplk9t-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjUwMCIsInBhdGgiOiJcL2ZcL2M3MTU2ZDFjLTUxNWMtNGE1ZC1hYjc3LWE4NTZmZWRkYTg5N1wvZGRwbGs5dC0xYjE5OGMzZC1kNjNkLTQxMjUtYWExMi0wYzFlNWFmZjk4NzAucG5nIiwid2lkdGgiOiI8PTI1MDAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.mLfbZWcq99q7RUYSputnFstpPkJkU5jR94YLR9NRlug">
+                    </div>
+                    <div class="user-activate">
+                        <h2 class="user-name">Revice</h2>
+                        <h4>Online</h4>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <button class="btn btn-search">
+                            <i class="icon ri-search-line"></i>
+                        </button>
+                    <button class="btn btn-phone">
+                            <i class="icon ri-phone-fill"></i>   
+                        </button>
+                    <button class="btn btn-video">
+                            <i class="icon ri-vidicon-line"></i>
+                        </button>
+                    <button class="btn btn-info">
+                            <i class="icon ri-information-fill"></i>
+                        </button>
+                    <button class="btn btn-option">
+                            <i class="icon ri-more-2-fill"></i>
+                        </button>
+                </div>
+            </div>
+            <div id="chatroom" class="chat-conversation">
+                <ul class="chat-box">
+
+                    <li class="user-2">
+
+                        <!-- <div class="image-user-2">
+                                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c7156d1c-515c-4a5d-ab77-a856fedda897/ddplk9t-1b198c3d-d63d-4125-aa12-0c1e5aff9870.png/v1/fill/w_894,h_894,strp/metalcluster_zero_one_by_markolios_ddplk9t-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjUwMCIsInBhdGgiOiJcL2ZcL2M3MTU2ZDFjLTUxNWMtNGE1ZC1hYjc3LWE4NTZmZWRkYTg5N1wvZGRwbGs5dC0xYjE5OGMzZC1kNjNkLTQxMjUtYWExMi0wYzFlNWFmZjk4NzAucG5nIiwid2lkdGgiOiI8PTI1MDAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.mLfbZWcq99q7RUYSputnFstpPkJkU5jR94YLR9NRlug">
+                            </div> -->
+
+                        <div class="list-conversation">
+                            <div class="text-user-2">
+                                Xin chào bạn
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <form class="chat-form">
+                <div class="level-left">
+                    <button class="btn btn-more">
+                            <i class="icon ri-more-line"></i>
+                        </button>
+                    <button class="btn btn-icon">
+                            <i class="icon ri-star-smile-line"></i>
+                        </button>
+                </div>
+                <div class="level-center">
+                    <input type="text" name="chat-input" id="message" class="chat-input" placeholder="Type your message...">
+                </div>
+                <div class="level-right">
+                    <button class="btn btn-micro">
+                        <i class="icon ri-mic-line"></i>
+                    </button>
+                    <button id="send_message" class="btn btn-send">
+                        <i class="icon ri-send-plane-2-line"></i> 
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modal">
+        <div class="modal-container">
+            <div class="modal-close">
+                <i class="ri-close-fill"></i>
+            </div>
+            <div class="modal-header">
+                <span>Create Contact</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" name="email" id="" class="form-input" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" name="name" id="username" class="form-input input-name" placeholder="Enter Name">
+                </div>
+                <div class="form-group">
+                    <label for="message" class="form-label">Invatation Message</label>
+                    <textarea type="text" name="message" id="" class="form-input" placeholder="Enter Message"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- <button class="btn btn-close">Close</button> -->
+                <button id="send_username" class="btn btn-invite">Invite</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+    <script src="chat.js"></script>
+</body>
+
+</html>
