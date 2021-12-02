@@ -39,7 +39,7 @@ $(function() {
         console.log("secret key: " + secretKey);
     });
 
-    socket.on('get_mess', (data) => {
+    socket.on('get_key', (data) => {
         let num = 1;
         if (data !== null) {
             for (let i = 0; i < secretKey; i++) {
@@ -52,10 +52,10 @@ $(function() {
                 num %= publicKey.p;
             }
         }
-        socket.emit('get_mess', num);
+        socket.emit('get_key', num);
     });
 
-    socket.on('send_mess', (data) => {
+    socket.on('send_key', (data) => {
         sharedSecret = 1;
         for (let i = 0; i < secretKey; i++) {
             sharedSecret *= data;
@@ -80,8 +80,6 @@ $(function() {
     socket.on("new_message", (data) => {
         if (data.message !== '' && data.username !== userContact.innerText) {
             let decryptedText = CryptoJS.AES.decrypt(data.message, sharedSecret.toString()).toString(CryptoJS.enc.Utf8);
-            console.log(decryptedText);
-
             var chatItem = document.createElement('li');
             chatItem.classList.add('user-2');
             var divChat = document.createElement('div');
@@ -91,8 +89,6 @@ $(function() {
             chatBox.appendChild(chatItem);
         } else if (data.message !== '' && data.username === userContact.innerText) {
             let decryptedText = CryptoJS.AES.decrypt(data.message, sharedSecret.toString()).toString(CryptoJS.enc.Utf8);
-            console.log(decryptedText);
-
             var chatItem = document.createElement('li');
             chatItem.classList.add('user-1');
             var divChat = document.createElement('div');
@@ -101,10 +97,6 @@ $(function() {
             chatItem.appendChild(divChat);
             chatBox.appendChild(chatItem);
         }
-        // feedback.html('');
-
-        // let decryptedText = CryptoJS.AES.decrypt(data.message, sharedSecret.toString()).toString(CryptoJS.enc.Utf8);
-        // chatroom.append("<p class='message'>" + data.username + ": " + decryptedText + "</p>")
     });
 
     socket.on("disconnected", (data) => {

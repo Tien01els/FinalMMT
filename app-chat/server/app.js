@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
     clients.add(socket);
     shareKeys();
 
-    socket.username = "Revice";
+    socket.username = "An Toàn Thông Tin";
 
     socket.on('change_username', (data) => {
         socket.username = data.username;
@@ -59,16 +59,15 @@ async function shareKeys() {
             }
         }
         if (middleMess !== undefined) {
-            client.emit('send_mess', middleMess);
+            client.emit('send_key', middleMess);
         }
     }
-    return Promise.resolve(1);
 }
 
 function compute(socket, middleMess) {
     return new Promise((resolve, reject) => {
         let timer;
-        socket.once('get_mess', responseHandler);
+        socket.once('get_key', responseHandler);
 
         function responseHandler(data) {
             clearTimeout(timer);
@@ -77,13 +76,13 @@ function compute(socket, middleMess) {
         timer = setTimeout(() => {
             reject("Waiting timeout");
         }, 10000);
-        socket.emit('get_mess', middleMess);
+        socket.emit('get_key', middleMess);
     })
 }
 
 function configurePublicKeys() {
-    let prime = generator.randomPrime();
-    let g = generator.gGenerator(prime);
+    let prime = 97;
+    let g = 1320;
     console.log("Configure public keys end.");
     return {
         p: prime,
